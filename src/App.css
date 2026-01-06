@@ -1,31 +1,225 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-    --color1: #5fffff;
-    --color2: #ff87af;
-    --color3: #87ff87;
-    --color4: #666;
-    --color5: #ffd7af;
-}
+/*#root {*/
+/*  max-width: 1280px;*/
+/*  margin: 0 auto;*/
+/*  padding: 2rem;*/
+/*  text-align: center;*/
+/*    --color1: #5fffff;*/
+/*    --color2: #ff87af;*/
+/*    --color3: #87ff87;*/
+/*    --color4: #666;*/
+/*    --color5: #ffd7af;*/
+/*}*/
 
-h1 {
-    color: var(--color1);
-}
+/*h1 {*/
+/*    color: var(--color1);*/
+/*}*/
 
-p {
-    color: var(--color4);
+/*p {*/
+/*    color: var(--color4);*/
+/*}*/
+
+/*body{*/
+/*    background-color: #000;*/
+/*    color: var(--color5);*/
+/*    line-height: 18px;*/
+/*    font-size: 13px;*/
+/*}*/
+
+/*#strikethrough{*/
+/*    text-decoration: line-through;*/
+/*}*/
+
+/*.terminal {*/
+/*    display: block;*/
+/*    padding: 5px;*/
+/*    text-align: left;*/
+/*    font-family: pt_mono, monospace;*/
+/*    color: white;*/
+/*    opacity: 1;*/
+/*    transition: opacity 1s;*/
+/*}*/
+
+
+:root{
+    /* Ubuntu/GNOME Terminal-ish */
+    --frame: #2f343f;      /* window header */
+    --frameText: #e5e7eb;
+    --bg: #300a24;         /* classic ubuntu terminal purple */
+    --text: #eee;
+    --muted: rgba(238,238,238,.72);
+    --border: rgba(255,255,255,.08);
+    --shadow: 0 18px 60px rgba(0,0,0,.55);
+
+    --green: #33d17a;
+    --blue: #62a0ea;
+    --cyan: #5bc8af;
+    --yellow: #f9f06b;
+    --red: #f66151;
 }
 
 body{
-    background-color: #000;
-    color: var(--color5);
-    line-height: 18px;
+    margin:0;
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    background: #111827;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.term{
+    width: min(920px, 94vw);
+    border-radius: 10px;
+    overflow:hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    background: var(--bg);
+}
+
+/* Linux window header*/
+.term__titlebar{
+    background: linear-gradient(#3a3f4b, var(--frame));
+    color: var(--frameText);
+    height: 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0 10px;
+    border-bottom: 1px solid rgba(0,0,0,.35);
+    user-select:none;
+}
+
+.term__left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width: 120px;
+}
+
+.term__appicon{
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    background: #111827;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+    position: relative;
+}
+.term__appicon::after{
+    content: ">";
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    font: 700 12px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    color: #d1d5db;
+    transform: translateX(1px);
+}
+.term__title{
     font-size: 13px;
+    opacity:.95;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-align:center;
+    flex: 1;
+    padding: 0 10px;
 }
 
-#strikethrough{
-    text-decoration: line-through;
+.term__winbtns{
+    display:flex;
+    gap:6px;
+    min-width: 120px;
+    justify-content:flex-end;
 }
 
+.btn{
+    width: 38px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.06);
+    display:grid;
+    place-items:center;
+    color: rgba(229,231,235,.85);
+    font-size: 14px;
+}
+.btn--close{
+    background: rgba(246,97,81,.15);
+    border-color: rgba(246,97,81,.35);
+    color: #ffd1cc;
+}
+
+.term__body{
+    padding: 14px 16px 18px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+}
+
+/*CSS classes to decorate*/
+.line{ display:block; white-space:pre-wrap; }
+.prompt { color: var(--muted); }
+.user { color: var(--green); font-weight: 700; }
+.host { color: var(--cyan); font-weight: 700; }
+.path { color: var(--blue); font-weight: 700; }
+.cmd  { color: var(--text); }
+.out  { color: var(--text); opacity: .95; }
+.dim  { color: var(--muted); }
+.err  { color: var(--red); }
+
+/* block cursor*/
+.cursor{
+    display:inline-block;
+    width: 0.62em;
+    height: 1.12em;
+    transform: translateY(3px);
+    background: rgba(238,238,238,.9);
+    animation: blink 1.05s steps(1) infinite;
+    margin-left: 2px;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Neofetch layout*/
+.neoRow{
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.neoArt, .neoInfo{
+    display: block;
+}
+
+.neoArtLine{
+    display: block;
+    color: var(--cyan);
+    font-weight: 700;
+    white-space: pre; /* keep spaces in ASCII art */
+    line-height: 1;
+}
+
+.neoInfoLine{
+    display: block;
+    white-space: nowrap;
+    line-height: 1.9;
+}
+
+.neoPalette{
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.neoSw{
+    width: 14px;
+    height: 10px;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+}
+
+.neoSw--green{ background: var(--green); }
+.neoSw--cyan{ background: var(--cyan); }
+.neoSw--blue{ background: var(--blue); }
+.neoSw--yellow{ background: var(--yellow); }
+.neoSw--red{ background: var(--red); }
+.neoSw--muted{ background: rgba(238,238,238,.35); }
