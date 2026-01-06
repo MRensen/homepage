@@ -1,0 +1,31 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+    --color1: #5fffff;
+    --color2: #ff87af;
+    --color3: #87ff87;
+    --color4: #666;
+    --color5: #ffd7af;
+}
+
+h1 {
+    color: var(--color1);
+}
+
+p {
+    color: var(--color4);
+}
+
+body{
+    background-color: #000;
+    color: var(--color5);
+    line-height: 18px;
+    font-size: 13px;
+}
+
+#strikethrough{
+    text-decoration: line-through;
+}
+
