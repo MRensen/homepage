@@ -1,0 +1,164 @@
+
+.term{
+    width: min(920px, 94vw);
+    border-radius: 10px;
+    overflow:hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    background: var(--bg);
+    min-height: 450px;
+    min-width: 900px;
+}
+
+/* Linux window header*/
+.term__titlebar{
+    background: linear-gradient(#3a3f4b, var(--frame));
+    color: var(--frameText);
+    height: 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 0 10px;
+    border-bottom: 1px solid rgba(0,0,0,.35);
+    user-select:none;
+}
+
+.term__left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width: 120px;
+}
+
+.term__appicon{
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    background: #111827;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+    position: relative;
+}
+.term__appicon::after{
+    content: ">";
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    font: 700 12px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    color: #d1d5db;
+    transform: translateX(1px);
+}
+.term__title{
+    font-size: 13px;
+    opacity:.95;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    text-align:center;
+    flex: 1;
+    padding: 0 10px;
+}
+
+.term__winbtns{
+    display:flex;
+    gap:6px;
+    min-width: 120px;
+    justify-content:flex-end;
+}
+
+.btn{
+    width: 38px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.06);
+    display:grid;
+    place-items:center;
+    color: rgba(229,231,235,.85);
+    font-size: 14px;
+}
+.btn--close{
+    background: rgba(246,97,81,.15);
+    border-color: rgba(246,97,81,.35);
+    color: #ffd1cc;
+}
+
+.term__body{
+    padding: 14px 16px 18px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--text);
+}
+
+/*CSS classes to decorate*/
+.line{ display:block;
+    white-space:pre;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+.prompt { color: var(--muted); }
+.user { color: var(--green); font-weight: 700; }
+.host { color: var(--cyan); font-weight: 700; }
+.path { color: var(--blue); font-weight: 700; }
+.cmd  { color: var(--text); }
+.out  { color: var(--text); opacity: .95; }
+.dim  { color: var(--muted); }
+.err  { color: var(--red); }
+
+/* block cursor*/
+.cursor{
+    display:inline-block;
+    width: 0.62em;
+    height: 1.12em;
+    transform: translateY(3px);
+    background: rgba(238,238,238,.9);
+    animation: blink 1.05s steps(1) infinite;
+    margin-left: 2px;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Neofetch layout*/
+.neoRow{
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+}
+
+.neoArt, .neoInfo{
+    display: block;
+}
+
+.neoArtLine{
+    display: block;
+    color: var(--cyan);
+    font-weight: 700;
+    white-space: pre; /* keep spaces in ASCII art */
+    line-height: 1;
+}
+
+.neoInfoLine{
+    display: block;
+    white-space: pre;
+    line-height: 1.9;
+}
+
+
+.neoPalette{
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.neoSw{
+    width: 14px;
+    height: 10px;
+    border-radius: 2px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+}
+
+.neoSw--green{ background: var(--green); }
+.neoSw--cyan{ background: var(--cyan); }
+.neoSw--blue{ background: var(--blue); }
+.neoSw--yellow{ background: var(--yellow); }
+.neoSw--red{ background: var(--red); }
+.neoSw--muted{ background: rgba(238,238,238,.35); }
