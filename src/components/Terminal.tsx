@@ -1,27 +1,15 @@
-import defaultart from "../assets/java.txt?raw";
 import * as React from "react";
 import "./terminal.css"
+import {type RefObject, useEffect, useRef, useState} from "react";
+import {Neofetch} from "./NeoFetch.tsx";
+import Help from "./Help.tsx";
 
-
-const personal_info = [
-    {key: "Name", value: "Mark Rensen"},
-    {key: "Role", value: "Backend developer | Docent"},
-    {key: "Shell", value: "Bash | PowerShell"},
-    {key: "Uptime", value: "∞"},
-    {key: "Editor", value: "IntelliJ | Webstorm | Pycharm"},
-    {key: "Languages", value: "Java | JavaScript | Kotlin | Python"},
-    {key: "Frameworks", value: "SpringBoot | React | FastApi | Ktor"},
-    {key: "Security", value: "Security-first | Oath | Spring security | Keycloak"},
-    {key: "Github", value: <a href="https://github.com/MRensen">github.com/MRensen</a>},
-    {key: "LinkedIn", value: <a href="https://www.linkedin.com/in/mark-rensen/">linkedin.com/mark-rensen</a>},
-    {key: "E-mail", value: <a href="mailto:markrensen@hotmail.com">markrensen@hotmail.com</a>},
-]
 
 type TerminalProps = {
     title?: string;
     user?: string;
     host?: string;
-
+    bodyItems?: React.ReactNode[];
 }
 
 type PromptProps = {
@@ -31,21 +19,10 @@ type PromptProps = {
     empty?: boolean;
 }
 
-type KV = {
-    key: string;
-    value: React.ReactNode; // kan tekst zijn of een <a> etc.
-};
-
-type NeofetchProps = {
-    art?: string;
-    items?: KV[];
-}
-
 export function TerminalPrompt({user="mark", host="homepage", cmd="echo", empty=false}: PromptProps){
 
     return (
             <span className="line">
-                {!empty &&
                     <>
 
                         <span className="user">{user}</span>
@@ -54,18 +31,65 @@ export function TerminalPrompt({user="mark", host="homepage", cmd="echo", empty=
                         <span className="prompt">:</span>
                         <span className="path">~</span>
                         <span className="prompt">$</span>
-                        {cmd == "blinking" ?
-                            (<>
-                                <span className="cmd"> </span>
-                                <span className="cursor" aria-hidden="true"></span>
-                            </>) :
-                            (<span className="cmd"> {cmd}</span>)
+                        {!empty &&
+                        <span className="cmd"> {cmd}</span>
                         }
+
                     </>
-                }
             </span>
         )
 
+}
+
+function TerminalPromptInput({user="mark", host="homepage", onSubmit, inputRef}:{user:string, host:string, onSubmit:(command: string) => void, inputRef:RefObject<HTMLInputElement|null>} ){
+    const [value, setValue] = useState("");
+
+
+    return(
+        <div>
+            <span className="user">{user}</span>
+            <span className="prompt">@</span>
+            <span className="host">{host}</span>
+            <span className="prompt">:</span>
+            <span className="path">~</span>
+            <span className="prompt">$</span>
+            <span> </span>
+            {/* interactive area */}
+            <span
+                className="cmdArea"
+
+            >
+                                        {/* mirror tekst bepaalt cursorpositie */}
+                <span className="cmdMirror" aria-hidden="true">
+                                            {value}
+                    {/* zorgt dat er altijd "iets" is om breedte te hebben */}
+                    <span className="cmdMirrorSpacer"> </span></span>
+
+                {/* echte input (onzichtbaar, maar ontvangt input) */}
+                <input
+                    ref={inputRef}
+                    className="cmdInput"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            const command = value;
+                            setValue("");
+                            onSubmit?.(command);
+                        }
+                    }}
+                    autoCapitalize="off"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoFocus={true}
+                    spellCheck={false}
+                />
+
+                {/* jouw cursor-blokje direct na mirror */}
+                <span className="cursor" aria-hidden="true" /></span>
+
+    </div>
+    )
 }
 
 function TerminalHeader(props: { title: string | undefined, user: string | undefined, host: string | undefined }) {
@@ -85,87 +109,48 @@ function TerminalHeader(props: { title: string | undefined, user: string | undef
     </div>;
 }
 
+const NeofetchList = [
+    <TerminalPrompt cmd="neofetch" />,
+    <Neofetch />
+];
 
+const HelpList = [
+    <TerminalPrompt cmd="help" />,
+    <Help/>
+]
 
-export function Neofetch({art = defaultart, items = personal_info}: NeofetchProps){
-    const lines = art.split(/\r?\n/);
+export function Terminal({title = "Terminal", user = "mark", host = "homepage", bodyItems} : TerminalProps) {
+    const [bodyList, setBodyList] = useState(bodyItems);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
+    useEffect(() => {
+        inputRef.current?.focus();
+    }, []);
 
-    return(
-    <span className="line out neoRow">
-        <NeofetchArt lines={lines}/>
-        <NeofetchInfo items={items}/>
-    </span>
-    )
-}
-
- function NeofetchArt({lines}: {lines:string[]}) {
-
-    return(
-        <span className="neoArt" aria-hidden="true">
-            {lines.map((line, i) => (
-                    <span key={i} className="neoArtLine">{line || "\u00A0"}</span>)
-            )}
-</span>
-    )
-}
-
- function NeofetchInfo({items}:{items: KV[]}){
-    return(
-        <span className="neoInfo">
-              <span className="neoInfoLine prompt">----------------------</span>
-            {items.map(({ key, value }, i) => (
-                <span className="neoInfoLine" key={`${key}-${i}`}>
-                    <span className="prompt">{key}:</span> {value}
-                </span>
-            ))}
-            <NeofetchPallette/>
-
-                        </span>
-    )
-}
-
-
-
-function NeofetchPallette(){
-    return(
-    <span className="neoPalette" aria-hidden="true">
-        <span className="neoSw neoSw--green"></span>
-        <span className="neoSw neoSw--cyan"></span>
-        <span className="neoSw neoSw--blue"></span>
-        <span className="neoSw neoSw--yellow"></span>
-        <span className="neoSw neoSw--red"></span>
-        <span className="neoSw neoSw--muted"></span>
-    </span>
-    )
-}
-
-
-
-
-
-
-export function Terminal({title = "Terminal", user = "mark", host = "homepage"} : TerminalProps) {
+    const switchBoard = (input:string) => {
+        console.log(input);
+        if (input === "help") {
+            setBodyList(HelpList)
+        }
+        if (input === "neofetch") {
+            setBodyList(NeofetchList)
+        }
+        if (input === "clear" || input === "home") {
+            setBodyList([])
+        }
+    }
     return(
         <>
-            <div className="term" role="region" aria-label="Linux terminal">
+            <div className="term" role="region" aria-label="Linux terminal"  onMouseDown={(e) => {
+                // klik ergens in de area => focus input (en voorkom tekstselectie)
+                e.preventDefault();
+                inputRef.current?.focus();
+            }}>
                 <TerminalHeader title={title} user={user} host={host}/>
 
                 <div className="term__body" aria-label="Terminal output">
-                    {/*<TerminalPrompt user={user} host={host} cmd="neofetch" typing={step == 1} />*/}
-                    {/*<TerminalPrompt empty={true}/>*/}
-                    {/*<Neofetch/>*/}
-                    {/*<TerminalPrompt empty={true}/>*/}
-                    {/*<TerminalPrompt user={user} host={host} cmd="blinking"/>*/}
-                    <TerminalPrompt
-                        user={user}
-                        host={host}
-                        cmd="neofetch"
-                    />
-                    <TerminalPrompt empty={true}/>
-                    <Neofetch/>
-                    <TerminalPrompt empty={true}/>
-                    <TerminalPrompt cmd="blinking"/>
+                    {bodyList}
+                    <TerminalPromptInput user={user} host={host} onSubmit={switchBoard} inputRef={inputRef}/>
                 </div>
             </div>
         </>

@@ -27,6 +27,12 @@
     --cyan: #5bc8af;
     --yellow: #f9f06b;
     --red: #f66151;
+
+        --color1: #5fffff;
+        --color2: #ff87af;
+        --color3: #87ff87;
+        --color4: #666;
+        --color5: #ffd7af;
 }
 
 body{
@@ -36,4 +42,16 @@ body{
     place-items:center;
     background: #111827;
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/*.app-main{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    gap: 1rem;*/
+/*}*/
+.app-main-p{
+    color: var(--color4)
 }
