@@ -5,3 +5,7 @@
     line-height: 1.2;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
+
+.help-line p{
+    margin: 0;
+}

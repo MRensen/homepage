@@ -3,26 +3,27 @@ import "./terminal.css"
 import {type RefObject, useEffect, useRef, useState} from "react";
 import {Neofetch} from "./NeoFetch.tsx";
 import Help from "./Help.tsx";
+import type { JSX } from "react/jsx-runtime";
 
 
 type TerminalProps = {
     title?: string;
     user?: string;
     host?: string;
-    bodyItems?: React.ReactNode[];
+    bodyItems: React.ReactNode[];
 }
 
 type PromptProps = {
-    user? : string;
-    host? : string;
+    user?: string;
+    host?: string;
     cmd?: string;
     empty?: boolean;
 }
 
-export function TerminalPrompt({user="mark", host="homepage", cmd="echo", empty=false}: PromptProps){
+export function TerminalPrompt({user = "mark", host = "homepage", cmd = "echo", empty = false}: PromptProps) {
 
     return (
-            <span className="line">
+        <span className="line">
                     <>
 
                         <span className="user">{user}</span>
@@ -32,20 +33,25 @@ export function TerminalPrompt({user="mark", host="homepage", cmd="echo", empty=
                         <span className="path">~</span>
                         <span className="prompt">$</span>
                         {!empty &&
-                        <span className="cmd"> {cmd}</span>
+                            <span className="cmd"> {cmd}</span>
                         }
 
                     </>
             </span>
-        )
+    )
 
 }
 
-function TerminalPromptInput({user="mark", host="homepage", onSubmit, inputRef}:{user:string, host:string, onSubmit:(command: string) => void, inputRef:RefObject<HTMLInputElement|null>} ){
+function TerminalPromptInput({user = "mark", host = "homepage", onSubmit, inputRef}: {
+    user: string,
+    host: string,
+    onSubmit: (command: string) => void,
+    inputRef: RefObject<HTMLInputElement | null>
+}) {
     const [value, setValue] = useState("");
 
 
-    return(
+    return (
         <div>
             <span className="user">{user}</span>
             <span className="prompt">@</span>
@@ -86,9 +92,9 @@ function TerminalPromptInput({user="mark", host="homepage", onSubmit, inputRef}:
                 />
 
                 {/* jouw cursor-blokje direct na mirror */}
-                <span className="cursor" aria-hidden="true" /></span>
+                <span className="cursor" aria-hidden="true"/></span>
 
-    </div>
+        </div>
     )
 }
 
@@ -109,35 +115,69 @@ function TerminalHeader(props: { title: string | undefined, user: string | undef
     </div>;
 }
 
-const NeofetchList = [
-    <TerminalPrompt cmd="neofetch" />,
-    <Neofetch />
-];
-
-const HelpList = [
-    <TerminalPrompt cmd="help" />,
-    <Help/>
-]
-
-export function Terminal({title = "Terminal", user = "mark", host = "homepage", bodyItems} : TerminalProps) {
+export function Terminal({title = "Terminal", user = "mark", host = "homepage", bodyItems=[]}: TerminalProps) {
     const [bodyList, setBodyList] = useState(bodyItems);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const bodyRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         inputRef.current?.focus();
     }, []);
 
+
+    useEffect(() => {
+        const el = bodyRef.current;
+        if (!el) return;
+        el.scrollTop = el.scrollHeight;
+    }, []);
+
+    function addBodyList(input: JSX.Element[]){
+        setBodyList([...bodyList, input]);
+    }
     const switchBoard = (input:string) => {
-        console.log(input);
-        if (input === "help") {
-            setBodyList(HelpList)
+        switch (input) {
+            case "help":
+                addBodyList([
+                    <TerminalPrompt cmd="help"/>,
+                    <Help/>
+                ])
+                break
+            case "neofetch":
+                addBodyList([
+                    <TerminalPrompt cmd="neofetch"/>,
+                    <Neofetch/>
+                ])
+                break
+            case "clear":
+            case "home":
+                setBodyList([]);
+                break
+            default:
+                addBodyList([
+                    <TerminalPrompt cmd={input} />,
+                    <div className="line">
+                        <p className="dim">Command '{input}' not found...</p>
+                        <p className="dim">Type 'help' for available commands</p>
+                    </div>
+                ])
         }
-        if (input === "neofetch") {
-            setBodyList(NeofetchList)
-        }
-        if (input === "clear" || input === "home") {
-            setBodyList([])
-        }
+        // if (input === "help") {
+        //     addBodyList(HelpList)
+        // } else if (input === "neofetch") {
+        //     addBodyList(NeofetchList)
+        // } else if (input === "clear" || input === "home") {
+        //     setBodyList([])
+        // } else {
+        //     addBodyList([
+        //         <TerminalPrompt cmd={input} />,
+        //         <div className="line">
+        //             <p className="dim">Command '{input}' not found...</p>
+        //             <p className="dim">Type 'help' for available commands</p>
+        //         </div>
+        //
+        //     ])
+        // }
+
     }
     return(
         <>
@@ -148,7 +188,7 @@ export function Terminal({title = "Terminal", user = "mark", host = "homepage", 
             }}>
                 <TerminalHeader title={title} user={user} host={host}/>
 
-                <div className="term__body" aria-label="Terminal output">
+                <div ref={bodyRef} className="term__body" aria-label="Terminal output">
                     {bodyList}
                     <TerminalPromptInput user={user} host={host} onSubmit={switchBoard} inputRef={inputRef}/>
                 </div>
