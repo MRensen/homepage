@@ -2,8 +2,10 @@ import * as React from "react";
 import "./terminal.css"
 import {type RefObject, useEffect, useRef, useState} from "react";
 import {Neofetch} from "./NeoFetch.tsx";
-import Help from "./Help.tsx";
+import {Help, Ls} from "./Commandos.tsx";
 import type { JSX } from "react/jsx-runtime";
+import validator from "validator"
+import {useNavigate} from "react-router-dom";
 
 
 type TerminalProps = {
@@ -115,6 +117,19 @@ function TerminalHeader(props: { title: string | undefined, user: string | undef
     </div>;
 }
 
+function CommandNotFound({input}: {input: string}){
+    return(
+        <div>
+        <TerminalPrompt cmd={input} />
+            <div className="line">
+                <p className="dim">Command '{input}' not found...</p>
+                <p className="dim">Type 'help' for available commands</p>
+            </div>
+        </div>
+    )
+
+}
+
 export function Terminal({title = "Terminal", user = "mark", host = "homepage", bodyItems=[]}: TerminalProps) {
     const [bodyList, setBodyList] = useState(bodyItems);
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -125,17 +140,33 @@ export function Terminal({title = "Terminal", user = "mark", host = "homepage", 
     }, []);
 
 
-    useEffect(() => {
-        const el = bodyRef.current;
-        if (!el) return;
-        el.scrollTop = el.scrollHeight;
-    }, []);
-
     function addBodyList(input: JSX.Element[]){
         setBodyList([...bodyList, input]);
     }
+
+    function xdgSwitchboard(command_parameter: string, input: string) {
+        switch (command_parameter) {
+            case "projects.html": {
+                addBodyList([<TerminalPrompt cmd={input}/>])
+                window.open(`${window.location.origin}/projects`, "_blank",);
+                break
+            }
+            default: {
+                addBodyList([
+                    <TerminalPrompt cmd={input}/>,
+                    <div className="line">
+                        <p className="dim">File '{command_parameter}' not found...</p>
+                    </div>
+                ])
+            }
+        }
+    }
+
     const switchBoard = (input:string) => {
-        switch (input) {
+        const input_list = input.split(" ")
+        const command = input_list[0]
+        const command_parameter = input_list[1]
+        switch (command) {
             case "help":
                 addBodyList([
                     <TerminalPrompt cmd="help"/>,
@@ -152,37 +183,38 @@ export function Terminal({title = "Terminal", user = "mark", host = "homepage", 
             case "home":
                 setBodyList([]);
                 break
-            default:
+            case "ls":
                 addBodyList([
-                    <TerminalPrompt cmd={input} />,
-                    <div className="line">
-                        <p className="dim">Command '{input}' not found...</p>
-                        <p className="dim">Type 'help' for available commands</p>
-                    </div>
+                    <TerminalPrompt cmd="ls"/>,
+                    <Ls/>
                 ])
+                break
+            case "open":
+            case "xdg-open":
+                if(input_list.length > 1) {
+                    xdgSwitchboard(command_parameter, input);
+                    break
+                } else {
+                    addBodyList([
+                        <TerminalPrompt cmd={input} />,
+                        <div className="line">
+                            <p className="dim">Usage: xdg-open [File | URL]</p>
+                            {/*<p className="dim">Type 'help' for available commands</p>*/}
+                        </div>
+                    ])
+                    break
+                }
+            default:
+                addBodyList([<CommandNotFound input={input}/>])
         }
-        // if (input === "help") {
-        //     addBodyList(HelpList)
-        // } else if (input === "neofetch") {
-        //     addBodyList(NeofetchList)
-        // } else if (input === "clear" || input === "home") {
-        //     setBodyList([])
-        // } else {
-        //     addBodyList([
-        //         <TerminalPrompt cmd={input} />,
-        //         <div className="line">
-        //             <p className="dim">Command '{input}' not found...</p>
-        //             <p className="dim">Type 'help' for available commands</p>
-        //         </div>
-        //
-        //     ])
-        // }
-
+        requestAnimationFrame(() => {
+            bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight });
+        });
     }
+
     return(
         <>
             <div className="term" role="region" aria-label="Linux terminal"  onMouseDown={(e) => {
-                // klik ergens in de area => focus input (en voorkom tekstselectie)
                 e.preventDefault();
                 inputRef.current?.focus();
             }}>

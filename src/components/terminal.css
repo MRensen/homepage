@@ -12,6 +12,11 @@
     overflow: hidden;
 }
 
+.term-full{
+    height: 100vh;
+    width: 100vw;
+}
+
 /* Linux window header*/
 .term__titlebar{
     background: linear-gradient(#3a3f4b, var(--frame));
