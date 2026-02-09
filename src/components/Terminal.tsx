@@ -2,27 +2,30 @@ import * as React from "react";
 import "./terminal.css"
 import {type RefObject, useEffect, useRef, useState} from "react";
 import {Neofetch} from "./NeoFetch.tsx";
-import Help from "./Help.tsx";
+import {Help, Ls} from "./Commandos.tsx";
+import type { JSX } from "react/jsx-runtime";
+import validator from "validator"
+import {useNavigate} from "react-router-dom";
 
 
 type TerminalProps = {
     title?: string;
     user?: string;
     host?: string;
-    bodyItems?: React.ReactNode[];
+    bodyItems: React.ReactNode[];
 }
 
 type PromptProps = {
-    user? : string;
-    host? : string;
+    user?: string;
+    host?: string;
     cmd?: string;
     empty?: boolean;
 }
 
-export function TerminalPrompt({user="mark", host="homepage", cmd="echo", empty=false}: PromptProps){
+export function TerminalPrompt({user = "mark", host = "homepage", cmd = "echo", empty = false}: PromptProps) {
 
     return (
-            <span className="line">
+        <span className="line">
                     <>
 
                         <span className="user">{user}</span>
@@ -32,20 +35,25 @@ export function TerminalPrompt({user="mark", host="homepage", cmd="echo", empty=
                         <span className="path">~</span>
                         <span className="prompt">$</span>
                         {!empty &&
-                        <span className="cmd"> {cmd}</span>
+                            <span className="cmd"> {cmd}</span>
                         }
 
                     </>
             </span>
-        )
+    )
 
 }
 
-function TerminalPromptInput({user="mark", host="homepage", onSubmit, inputRef}:{user:string, host:string, onSubmit:(command: string) => void, inputRef:RefObject<HTMLInputElement|null>} ){
+function TerminalPromptInput({user = "mark", host = "homepage", onSubmit, inputRef}: {
+    user: string,
+    host: string,
+    onSubmit: (command: string) => void,
+    inputRef: RefObject<HTMLInputElement | null>
+}) {
     const [value, setValue] = useState("");
 
 
-    return(
+    return (
         <div>
             <span className="user">{user}</span>
             <span className="prompt">@</span>
@@ -86,9 +94,9 @@ function TerminalPromptInput({user="mark", host="homepage", onSubmit, inputRef}:
                 />
 
                 {/* jouw cursor-blokje direct na mirror */}
-                <span className="cursor" aria-hidden="true" /></span>
+                <span className="cursor" aria-hidden="true"/></span>
 
-    </div>
+        </div>
     )
 }
 
@@ -109,46 +117,110 @@ function TerminalHeader(props: { title: string | undefined, user: string | undef
     </div>;
 }
 
-const NeofetchList = [
-    <TerminalPrompt cmd="neofetch" />,
-    <Neofetch />
-];
+function CommandNotFound({input}: {input: string}){
+    return(
+        <div>
+        <TerminalPrompt cmd={input} />
+            <div className="line">
+                <p className="dim">Command '{input}' not found...</p>
+                <p className="dim">Type 'help' for available commands</p>
+            </div>
+        </div>
+    )
 
-const HelpList = [
-    <TerminalPrompt cmd="help" />,
-    <Help/>
-]
+}
 
-export function Terminal({title = "Terminal", user = "mark", host = "homepage", bodyItems} : TerminalProps) {
+export function Terminal({title = "Terminal", user = "mark", host = "homepage", bodyItems=[]}: TerminalProps) {
     const [bodyList, setBodyList] = useState(bodyItems);
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const bodyRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         inputRef.current?.focus();
     }, []);
 
-    const switchBoard = (input:string) => {
-        console.log(input);
-        if (input === "help") {
-            setBodyList(HelpList)
-        }
-        if (input === "neofetch") {
-            setBodyList(NeofetchList)
-        }
-        if (input === "clear" || input === "home") {
-            setBodyList([])
+
+    function addBodyList(input: JSX.Element[]){
+        setBodyList([...bodyList, input]);
+    }
+
+    function xdgSwitchboard(command_parameter: string, input: string) {
+        switch (command_parameter) {
+            case "projects.html": {
+                addBodyList([<TerminalPrompt cmd={input}/>])
+                window.open(`${window.location.origin}/projects`, "_blank",);
+                break
+            }
+            default: {
+                addBodyList([
+                    <TerminalPrompt cmd={input}/>,
+                    <div className="line">
+                        <p className="dim">File '{command_parameter}' not found...</p>
+                    </div>
+                ])
+            }
         }
     }
+
+    const switchBoard = (input:string) => {
+        const input_list = input.split(" ")
+        const command = input_list[0]
+        const command_parameter = input_list[1]
+        switch (command) {
+            case "help":
+                addBodyList([
+                    <TerminalPrompt cmd="help"/>,
+                    <Help/>
+                ])
+                break
+            case "neofetch":
+                addBodyList([
+                    <TerminalPrompt cmd="neofetch"/>,
+                    <Neofetch/>
+                ])
+                break
+            case "clear":
+            case "home":
+                setBodyList([]);
+                break
+            case "ls":
+                addBodyList([
+                    <TerminalPrompt cmd="ls"/>,
+                    <Ls/>
+                ])
+                break
+            case "open":
+            case "xdg-open":
+                if(input_list.length > 1) {
+                    xdgSwitchboard(command_parameter, input);
+                    break
+                } else {
+                    addBodyList([
+                        <TerminalPrompt cmd={input} />,
+                        <div className="line">
+                            <p className="dim">Usage: xdg-open [File | URL]</p>
+                            {/*<p className="dim">Type 'help' for available commands</p>*/}
+                        </div>
+                    ])
+                    break
+                }
+            default:
+                addBodyList([<CommandNotFound input={input}/>])
+        }
+        requestAnimationFrame(() => {
+            bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight });
+        });
+    }
+
     return(
         <>
             <div className="term" role="region" aria-label="Linux terminal"  onMouseDown={(e) => {
-                // klik ergens in de area => focus input (en voorkom tekstselectie)
                 e.preventDefault();
                 inputRef.current?.focus();
             }}>
                 <TerminalHeader title={title} user={user} host={host}/>
 
-                <div className="term__body" aria-label="Terminal output">
+                <div ref={bodyRef} className="term__body" aria-label="Terminal output">
                     {bodyList}
                     <TerminalPromptInput user={user} host={host} onSubmit={switchBoard} inputRef={inputRef}/>
                 </div>

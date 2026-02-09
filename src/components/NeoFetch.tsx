@@ -31,36 +31,36 @@ export function Neofetch({art = defaultart, items = personal_info}: NeofetchProp
 
 
     return(
-        <span className="line out neoRow">
+        <div className="line out neoRow">
         <NeofetchArt lines={lines}/>
         <NeofetchInfo items={items}/>
-    </span>
+    </div>
     )
 }
 
 function NeofetchArt({lines}: {lines:string[]}) {
 
     return(
-        <span className="neoArt" aria-hidden="true">
+        <div className="neoArt" aria-hidden="true">
             {lines.map((line, i) => (
-                <span key={i} className="neoArtLine">{line || "\u00A0"}</span>)
+                <p key={i} className="neoArtLine">{line || "\u00A0"}</p>)
             )}
-</span>
+</div>
     )
 }
 
 function NeofetchInfo({items}:{items: KV[]}){
     return(
-        <span className="neoInfo">
-              <span className="neoInfoLine prompt">----------------------</span>
+        <div className="neoInfo">
+              <p className="neoInfoLine prompt">----------------------</p>
             {items.map(({ key, value }, i) => (
-                <span className="neoInfoLine" key={`${key}-${i}`}>
+                <p className="neoInfoLine" key={`${key}-${i}`}>
                     <span className="prompt">{key}:</span> {value}
-                </span>
+                </p>
             ))}
             <NeofetchPallette/>
 
-                        </span>
+                        </div>
     )
 }
 
@@ -68,13 +68,13 @@ function NeofetchInfo({items}:{items: KV[]}){
 
 function NeofetchPallette(){
     return(
-        <span className="neoPalette" aria-hidden="true">
-        <span className="neoSw neoSw--green"></span>
-        <span className="neoSw neoSw--cyan"></span>
-        <span className="neoSw neoSw--blue"></span>
-        <span className="neoSw neoSw--yellow"></span>
-        <span className="neoSw neoSw--red"></span>
-        <span className="neoSw neoSw--muted"></span>
-    </span>
+        <div className="neoPalette" aria-hidden="true">
+        <p className="neoSw neoSw--green"></p>
+        <p className="neoSw neoSw--cyan"></p>
+        <p className="neoSw neoSw--blue"></p>
+        <p className="neoSw neoSw--yellow"></p>
+        <p className="neoSw neoSw--red"></p>
+        <p className="neoSw neoSw--muted"></p>
+    </div>
     )
 }
