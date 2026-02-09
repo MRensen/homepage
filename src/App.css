@@ -16,10 +16,10 @@
     /* Ubuntu/GNOME Terminal-ish */
     --frame: #2f343f;      /* window header */
     --frameText: #e5e7eb;
-    --bg: #300a24;         /* classic ubuntu terminal purple */
+    --projects-bg: #300a24;         /* classic ubuntu terminal purple */
     --text: #eee;
-    --muted: rgba(238,238,238,.72);
-    --border: rgba(255,255,255,.08);
+    --projects-muted: rgba(238,238,238,.72);
+    --projects-border: rgba(255,255,255,.08);
     --shadow: 0 18px 60px rgba(0,0,0,.55);
 
     --green: #33d17a;
@@ -44,11 +44,121 @@ body{
     font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
 
-/*.app-main{*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
+.app-shell{
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    margin-top: 60px;
 
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    gap: 1rem;*/
+    /* centreer de pagina-inhoud (Terminal) */
+    display: grid;
+    place-items: center;
+}
+
+/*.navheader{*/
+/*    !*fixed top-0 left-0 w-full h-[60px] blue px-5*!*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 40px;*/
+/*    background: var(--color4);*/
+/*    padding: 5px;*/
+/*    display: flex;*/
+/*    align-items: start;*/
+/*    gap: 10px;*/
 /*}*/
+
+.navlink{
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    margin: 0 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: color 150ms ease, text-decoration-color 150ms ease;
+}
+
+.navlink:hover{
+    text-decoration: underline;
+}
+
+.navheader{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 40px;
+    background: var(--color4);
+    padding: 5px 12px;
+    padding-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* als je hem rechts wil */
+    gap: 10px;
+    z-index: 1000;
+}
+
+/* wrapper: belangrijk voor hover */
+.navDropdown{
+    position: relative;
+}
+
+/* "button" look */
+.navDropdownBtn{
+    display: inline-block;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+.navDropdownBtn:hover{
+    text-decoration: underline;
+}
+
+/* menu verborgen standaard */
+.navDropdownMenu{
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;                 /* start op de linker rand van de button */
+    transform: translateX(0);/* default */
+
+    list-style: none;
+    margin: 0;
+    padding: 6px;
+
+    min-width: 200px;
+    background: #111827;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px;
+    box-shadow: 0 18px 60px rgba(0,0,0,.55);
+}
+
+/* tonen op hover (zowel button als menu, omdat wrapper gehoverd blijft) */
+.navDropdown:hover .navDropdownMenu{
+    display: block;
+}
+
+.navDropdown::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 8px;          /* moet gelijk zijn aan de gap */
+}
+
+.navDropdownItem{
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.navDropdownItem:hover{
+    background: rgba(255,255,255,.08);
+}
+
+

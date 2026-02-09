@@ -4,24 +4,19 @@ import "./commandos.css"
 export function Help(){
     return(
         <div className="help-line">
-            <p className="dim">GNU bash, version 5.2.37(1)-release (x86_64-pc-msys)</p>
+            <p className="dim">GNU mash, version 5.2.37(1)-release (x86_64-pc-msys)</p>
             <p className="dim">These shell commands are defined internally</p>
             <p className="dim">Type 'help' to see this list.</p>
             <p className="dim">Type 'neofetch' to see my personal info</p>
             <p className="dim">Type 'home' or 'clear' to clear screen</p>
-            <p className="dim">Type 'curl', 'open', 'wget' or 'xdg-open' to open a webpage</p>
-
-
-
-            {/*<span className="dim"></span>*/}
-
+            <p className="dim">Type 'open' or 'xdg-open' to open a document</p>
         </div>
     )
 }
 
 const files = [
     // date and time, length, name
-    {mode: "-r--r--r--", datetime:"6-1-2026     20:41", length:"744", name:"projects.html"}
+    {mode: "-r--r--r--", datetime:"6-1-2026     20:41", length:"744", name:"feedbacktool.md"}
 ]
 
 //    4 17 13 9 6 1 4

@@ -3,16 +3,19 @@
     /*width: min(920px, 94vw);*/
     border-radius: 10px;
     box-shadow: var(--shadow);
-    border: 1px solid var(--border);
-    background: var(--bg);
-    height: 450px;
-    width: 900px;
+    border: 1px solid var(--projects-border);
+    background: var(--projects-bg);
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
-.term-full{
+.term_small{
+    height: 450px;
+    width: 900px;
+}
+
+.term_full{
     height: 100vh;
     width: 100vw;
 }
@@ -113,13 +116,13 @@
     margin: 0;
 }
 
-.prompt { color: var(--muted); }
+.prompt { color: var(--projects-muted); }
 .user { color: var(--green); font-weight: 700; }
 .host { color: var(--cyan); font-weight: 700; }
 .path { color: var(--blue); font-weight: 700; }
 .cmd  { color: var(--text); }
 .out  { color: var(--text); opacity: .95; }
-.dim  { color: var(--muted); }
+.dim  { color: var(--projects-muted); }
 .err  { color: var(--red); }
 
 /* block cursor*/
@@ -180,4 +183,28 @@
 .cmdMirrorSpacer {
     display: inline-block;
     width: 0; /* of 0.0001px; afhankelijk van font, meestal niet nodig */
+}
+
+.desktop-icon {
+    display: inline-flex;        /* gedraagt zich als een icoontje */
+    flex-direction: column;      /* onder elkaar */
+    align-items: center;         /* horizontaal centreren */
+    gap: 2px;
+
+    color: #fff;                 /* tekst wit */
+    font-family: Cantarell, Ubuntu, "DejaVu Sans", "Noto Sans", Arial, sans-serif;
+    user-select: none;
+}
+
+.desktop-icon img {
+    width: 128px;                 /* kies zelf */
+    height: 128px;
+    display: block;
+}
+
+.desktop-icon p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.1;
+    text-align: center;
 }

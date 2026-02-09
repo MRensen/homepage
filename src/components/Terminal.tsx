@@ -1,11 +1,10 @@
 import * as React from "react";
 import "./terminal.css"
-import {type RefObject, useEffect, useRef, useState} from "react";
+import terminal_svg from  "../assets/terminal-icon.svg"
+import {type ReactNode, type RefObject, useEffect, useRef, useState} from "react";
 import {Neofetch} from "./NeoFetch.tsx";
 import {Help, Ls} from "./Commandos.tsx";
 import type { JSX } from "react/jsx-runtime";
-import validator from "validator"
-import {useNavigate} from "react-router-dom";
 
 
 type TerminalProps = {
@@ -100,7 +99,7 @@ function TerminalPromptInput({user = "mark", host = "homepage", onSubmit, inputR
     )
 }
 
-function TerminalHeader(props: { title: string | undefined, user: string | undefined, host: string | undefined }) {
+function TerminalHeader(props: { title: string | undefined, user: string | undefined, host: string | undefined, smallTerminal: boolean, toggleSmallTerminal: React.Dispatch<React.SetStateAction<boolean>>, terminal: boolean, toggleTerminal: React.Dispatch<React.SetStateAction<boolean>>, setTerminalBody: React.Dispatch<React.SetStateAction<ReactNode[]>>}) {
     return <div className="term__titlebar">
         <div className="term__left">
             <div className="term__appicon" aria-hidden="true"></div>
@@ -110,9 +109,12 @@ function TerminalHeader(props: { title: string | undefined, user: string | undef
         <div className="term__title">{props.user}@{props.host}: ~/project</div>
 
         <div className="term__winbtns" aria-hidden="true">
-            <div className="btn" title="Minimize">–</div>
-            <div className="btn" title="Maximize">□</div>
-            <div className="btn btn--close" title="Close">×</div>
+            <div className="btn" title="Minimize" onClick={()=>props.toggleTerminal(!props.terminal)}>–</div>
+            <div className="btn" title="Maximize" onClick={()=>{
+                props.toggleSmallTerminal(!props.smallTerminal);
+
+            }}>{props.smallTerminal?"□":"⧉"}</div>
+            <div className="btn btn--close" title="Close" onClick={()=>{props.toggleTerminal(!props.terminal); props.setTerminalBody([])}}>×</div>
         </div>
     </div>;
 }
@@ -132,6 +134,8 @@ function CommandNotFound({input}: {input: string}){
 
 export function Terminal({title = "Terminal", user = "mark", host = "homepage", bodyItems=[]}: TerminalProps) {
     const [bodyList, setBodyList] = useState(bodyItems);
+    const [smallTerminal, toggleSmallTerminal] = useState(true);
+    const [terminal, toggleTerminal] = useState(true);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const bodyRef = useRef<HTMLDivElement | null>(null);
 
@@ -146,9 +150,9 @@ export function Terminal({title = "Terminal", user = "mark", host = "homepage", 
 
     function xdgSwitchboard(command_parameter: string, input: string) {
         switch (command_parameter) {
-            case "projects.html": {
+            case "feedbacktool.md": {
                 addBodyList([<TerminalPrompt cmd={input}/>])
-                window.open(`${window.location.origin}/projects`, "_blank",);
+                window.open(`${window.location.origin}/projects/feedbacktool`, "_blank",);
                 break
             }
             default: {
@@ -198,7 +202,7 @@ export function Terminal({title = "Terminal", user = "mark", host = "homepage", 
                     addBodyList([
                         <TerminalPrompt cmd={input} />,
                         <div className="line">
-                            <p className="dim">Usage: xdg-open [File | URL]</p>
+                            <p className="dim">Usage: {command} [File | URL]</p>
                             {/*<p className="dim">Type 'help' for available commands</p>*/}
                         </div>
                     ])
@@ -213,18 +217,22 @@ export function Terminal({title = "Terminal", user = "mark", host = "homepage", 
     }
 
     return(
-        <>
-            <div className="term" role="region" aria-label="Linux terminal"  onMouseDown={(e) => {
+        terminal?
+            <div className={smallTerminal?"term term_small":"term term_full"} role="region" aria-label="Linux terminal"  onMouseDown={(e) => {
                 e.preventDefault();
                 inputRef.current?.focus();
             }}>
-                <TerminalHeader title={title} user={user} host={host}/>
-
+                <TerminalHeader title={title} user={user} host={host} smallTerminal={smallTerminal} toggleSmallTerminal={toggleSmallTerminal} terminal={terminal} toggleTerminal={toggleTerminal} setTerminalBody={setBodyList}/>
                 <div ref={bodyRef} className="term__body" aria-label="Terminal output">
                     {bodyList}
                     <TerminalPromptInput user={user} host={host} onSubmit={switchBoard} inputRef={inputRef}/>
                 </div>
             </div>
-        </>
+            :
+            <div className="desktop-icon">
+                <img src={terminal_svg} onClick={()=>toggleTerminal(!terminal)} alt="terminal icon"/>
+                <p>Click me</p>
+            </div>
+
     )
 }
