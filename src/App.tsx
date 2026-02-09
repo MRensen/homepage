@@ -2,6 +2,7 @@ import './App.css'
 import './components/terminal.css'
 import {Terminal} from "./components/Terminal.tsx";
 import {Routes, Route} from "react-router-dom";
+import ProjectsPage from "./pages/projects/Projects.tsx";
 
 
 function App() {
@@ -12,11 +13,13 @@ function App() {
 
             <Routes>
                 <Route path="/" element={
-                    // <main className="app-main">
+                    // <main className="min-h-screen pt-[60px] grid justify-center items-center">
                         <Terminal bodyItems={[<p className="app-main-p">Hint: Type help</p>]}/>
                     // </main>
                 }/>
-                <Route path="/projects" element={<h1>Projects</h1>}/>
+                <Route path="/projects/feedbacktool" element={
+                    <ProjectsPage project="feedbacktool"/>
+                }/>
             </Routes>
 
 
