@@ -155,6 +155,11 @@ export function Terminal({title = "Terminal", user = "mark", host = "homepage", 
                 window.open(`${window.location.origin}/projects/feedbacktool`, "_blank",);
                 break
             }
+            case "dockerize.md": {
+                addBodyList([<TerminalPrompt cmd={input}/>])
+                window.open(`${window.location.origin}/projects/dockerize`, "_blank",);
+                break
+            }
             default: {
                 addBodyList([
                     <TerminalPrompt cmd={input}/>,
