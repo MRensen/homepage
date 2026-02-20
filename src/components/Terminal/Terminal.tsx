@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./terminal.css"
-import terminal_svg from  "../assets/terminal-icon.svg"
+import terminal_svg from "../../assets/terminal-icon.svg"
 import {type ReactNode, type RefObject, useEffect, useRef, useState} from "react";
 import {Neofetch} from "./NeoFetch.tsx";
 import {Help, Ls} from "./Commandos.tsx";

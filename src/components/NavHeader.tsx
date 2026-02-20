@@ -36,7 +36,7 @@ export default function NavHeader() {
     const navigate = useNavigate();
     const projecten = [
         {callback:() => navigate("/projects/feedbacktool"), title:"feedbacktool"},
-        {callback:() => console.log("test"), title:"test"},
+        {callback:() => navigate("/projects/dockerize"), title:"dockerize"},
     ]
 
     return (

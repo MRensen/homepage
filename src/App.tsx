@@ -1,6 +1,6 @@
 import './App.css'
-import './components/terminal.css'
-import {Terminal} from "./components/Terminal.tsx";
+import './components/Terminal/terminal.css'
+import {Terminal} from "./components/Terminal/Terminal.tsx";
 import {Routes, Route} from "react-router-dom";
 import ProjectsPage from "./pages/projects/Projects.tsx";
 
@@ -19,6 +19,9 @@ function App() {
                 }/>
                 <Route path="/projects/feedbacktool" element={
                     <ProjectsPage project="feedbacktool"/>
+                }/>
+                <Route path="/projects/dockerize" element={
+                    <ProjectsPage project="dockerize"/>
                 }/>
             </Routes>
 

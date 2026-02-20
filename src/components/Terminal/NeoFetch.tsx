@@ -1,5 +1,5 @@
 import * as React from "react";
-import defaultart from "../assets/java.txt?raw";
+import defaultart from "../../assets/java.txt?raw";
 import "./neofetch.css"
 
 const personal_info = [
