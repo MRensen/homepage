@@ -95,7 +95,7 @@ In de toekomst is wellicht uitbreiding naar andere cluster, scholen of zelfs naa
   - Nieuwe huiswerkopdrachten in het systeem zetten.
 
 ## Mijn bijdrage
-- Als solo developer heb ik alles gedaan, in regelmatig overleg met de opdrachtgever (hogeschool NOVI)
+- Als solo developer heb ik alles gedaan, in regelmatig overleg met de opdrachtgever (NOVI hogeschool)
 
 ## Uitdagingen & oplossingen
 - **Uitdaging:** Feedback naar de student communiceren
