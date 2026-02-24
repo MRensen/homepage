@@ -23,10 +23,10 @@ Dit is geen applicatie, maar een PowerShell script om automatisch ingeleverde ei
 
 ## Screenshots / media
 
-![Docker build](docker.png)   
+![Docker build](/projects/Dockerize/docker.png)   
 (Figuur 1: De docker build output)
 
-![Compose output](compose.png)    
+![Compose output](/projects/Dockerize/compose.png)    
 (Figuur 2: De compose output)
 
 ## Tech stack
