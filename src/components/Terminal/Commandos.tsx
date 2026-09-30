@@ -11,6 +11,7 @@ export function Help(){
             <p className="dim">Type 'home' or 'clear' to clear screen</p>
             <p className="dim">Type 'ls' to list documents</p>
             <p className="dim">Type 'open' or 'xdg-open' to open a document</p>
+            <p className="dim">Type 'echo' to display a line of text</p>
         </div>
     )
 }
@@ -21,7 +22,7 @@ const files = [
     {mode: "-r--r--r--", datetime:"17-2-2026     14:54", length:"523", name:"dockerize.md"},
 ]
 
-//    4 17 13 9 6 1 4
+//   witruimte afstanden zijn: 4 17 13 9 6 1 4
 export function Ls(){
     return(
         <div className="help-line">
@@ -31,6 +32,14 @@ export function Ls(){
                 <p className="dim">{file.mode}{" ".repeat(34-file.mode.length-file.datetime.length)}{file.datetime}{" ".repeat(15-file.length.length)}{file.length} {file.name}</p>
             )}
 
+        </div>
+    )
+}
+
+export function Echo({input}: { input: string }) {
+    return(
+        <div className="help-line">
+            <p className="dim">{input}</p>
         </div>
     )
 }
