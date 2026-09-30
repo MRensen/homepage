@@ -1,12 +1,14 @@
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 
 
 function GenericLink({text, onClick} : { text: string, onClick: () => void }) {
     return(
-        <span
+        <button
+            type="button"
             className="navlink"
             onClick={onClick}
-        >{text}</span>
+        >{text}</button>
     )
 }
 
@@ -14,16 +16,34 @@ function DropDown({list}:{list: {
         callback: () => void;
         title: string;
     }[];}){
+    const [open, setOpen] = useState(false);
 
     return(
         <div className="navDropdown">
-            <span className="navDropdownBtn">Projects</span>
+            <button
+                type="button"
+                className="navDropdownBtn"
+                aria-expanded={open}
+                aria-controls="projects-menu"
+                onClick={() => setOpen((current) => !current)}
+            >
+                Projects
+            </button>
 
-            <ul className="navDropdownMenu">
+            <ul id="projects-menu" className={`navDropdownMenu${open ? " is-open" : ""}`}>
                 {list.map((item)=> {
                     return (
-                        <li className="navDropdownItem" onClick={item.callback}>
-                            {item.title}
+                        <li key={item.title}>
+                            <button
+                                type="button"
+                                className="navDropdownItem"
+                                onClick={() => {
+                                    item.callback();
+                                    setOpen(false);
+                                }}
+                            >
+                                {item.title}
+                            </button>
                         </li>
                     )
                 })}
