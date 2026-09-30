@@ -3,7 +3,7 @@ import "./terminal.css"
 import terminal_svg from "../../assets/terminal-icon.svg"
 import {type ReactNode, type RefObject, useEffect, useRef, useState} from "react";
 import {Neofetch} from "./NeoFetch.tsx";
-import {Help, Ls} from "./Commandos.tsx";
+import {Echo, Help, Ls} from "./Commandos.tsx";
 import type { JSX } from "react/jsx-runtime";
 
 
@@ -177,6 +177,11 @@ export function Terminal({title = "Terminal", user = "mark", host = "homepage", 
         const command = input_list[0]
         const command_parameter = input_list[1]
         switch (command) {
+            case "echo":
+                addBodyList([<TerminalPrompt cmd={input}/>,
+                    <Echo input={input_list.slice(1).join(' ')}/>
+                    ])
+                break
             case "help":
                 addBodyList([
                     <TerminalPrompt cmd="help"/>,
