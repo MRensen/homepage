@@ -12,6 +12,10 @@
 
 
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 :root{
     /* Ubuntu/GNOME Terminal-ish */
     --frame: #2f343f;      /* window header */
@@ -33,6 +37,14 @@
         --color3: #87ff87;
         --color4: #666;
         --color5: #ffd7af;
+}
+
+html,
+body,
+#root {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 body{
@@ -70,11 +82,13 @@ body{
 
 .navlink{
     color: white;
+    background: transparent;
     border: none;
     padding: 8px 20px;
     margin: 0 8px;
     border-radius: 6px;
     cursor: pointer;
+    font: inherit;
     transition: color 150ms ease, text-decoration-color 150ms ease;
 }
 
@@ -86,7 +100,7 @@ body{
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     height: 40px;
     background: var(--color4);
     padding: 5px 12px;
@@ -98,6 +112,43 @@ body{
     z-index: 1000;
 }
 
+@media (max-width: 600px) {
+    .term {
+        border-radius: 6px;
+    }
+
+    .term__titlebar {
+        padding: 0 8px;
+    }
+
+    .term__left {
+        min-width: 0;
+    }
+
+    .term__winbtns {
+        min-width: auto;
+        gap: 3px;
+    }
+
+    .btn {
+        width: 34px;
+    }
+
+    .term__title:nth-child(2) {
+        display: none;
+    }
+
+    .term__body {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .neoRow {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
 /* wrapper: belangrijk voor hover */
 .navDropdown{
     position: relative;
@@ -107,10 +158,13 @@ body{
 .navDropdownBtn{
     display: inline-block;
     color: white;
+    background: transparent;
+    border: 0;
     padding: 8px 14px;
     border-radius: 6px;
     cursor: pointer;
     user-select: none;
+    font: inherit;
 }
 .navDropdownBtn:hover{
     text-decoration: underline;
@@ -135,9 +189,15 @@ body{
     box-shadow: 0 18px 60px rgba(0,0,0,.55);
 }
 
-/* tonen op hover (zowel button als menu, omdat wrapper gehoverd blijft) */
-.navDropdown:hover .navDropdownMenu{
+.navDropdownMenu.is-open {
     display: block;
+}
+
+/* Hover is the trigger on desktop; mobile uses the button state instead. */
+@media (min-width: 601px) {
+    .navDropdown:hover .navDropdownMenu {
+        display: block;
+    }
 }
 
 .navDropdown::after{
@@ -150,15 +210,19 @@ body{
 }
 
 .navDropdownItem{
+    display: block;
+    width: 100%;
     color: white;
+    background: transparent;
+    border: 0;
     padding: 10px 12px;
     border-radius: 8px;
     cursor: pointer;
     white-space: nowrap;
+    text-align: left;
+    font: inherit;
 }
 
 .navDropdownItem:hover{
     background: rgba(255,255,255,.08);
 }
-
-

@@ -90,6 +90,7 @@ function TerminalPromptInput({user = "mark", host = "homepage", onSubmit, inputR
                     autoCorrect="off"
                     autoFocus={true}
                     spellCheck={false}
+                    inputMode={"text"}
                 />
 
                 {/* jouw cursor-blokje direct na mirror */}

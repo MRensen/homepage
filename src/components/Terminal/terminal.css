@@ -8,16 +8,18 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    max-width: 100%;
+    min-width: 0;
 }
 
 .term_small{
-    height: 450px;
-    width: 900px;
+    height: min(450px, calc(100dvh - 100px));
+    width: min(900px, calc(100vw - 24px));
 }
 
 .term_full{
-    height: 100vh;
-    width: 100vw;
+    height: calc(100dvh - 60px);
+    width: 100%;
     margin-top: 50px;
 }
 
@@ -103,7 +105,7 @@
     color: var(--text);
     flex-direction: column;
     flex: 1;     /* pakt de rest van de hoogte */
-    overflow-y: auto;   /* dit element gaat scrollen */
+    overflow: auto;   /* dit element gaat scrollen */
     min-height: 0;      /* belangrijk in flex layouts zodat overflow werkt */
 
 }
